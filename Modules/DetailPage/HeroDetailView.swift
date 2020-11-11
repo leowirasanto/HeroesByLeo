@@ -11,6 +11,7 @@ import AlamofireImage
 
 protocol IHeroDetailView: class {
     var router: IHeroDetailRouter? { get set }
+    func displayHeroDetail(selected: Hero.Response?, related: [Hero.Response])
 }
 
 class HeroDetailView: UIViewController {
@@ -28,16 +29,11 @@ class HeroDetailView: UIViewController {
     @IBOutlet weak var similarHeroStack: UIStackView!
     @IBOutlet var similarHeroesIcons: [UIImageView]!
 
-    var relatedHeroes: [Hero.Response] {
-        guard let related = interactor?.parameters?["relatedHeroes"] as? [Hero.Response] else { return [] }
-        return related
-    }
-    var selectedHero: Hero.Response? {
-        return interactor?.parameters?["selectedHero"] as? Hero.Response
-    }
+    var relatedHeroes: [Hero.Response] = []
+    var selectedHero: Hero.Response?
 
     override func viewDidLoad() {
-        bindData()
+        interactor?.fetchHeroDetail()
     }
 
     private func bindData() {
@@ -70,5 +66,10 @@ class HeroDetailView: UIViewController {
 }
 
 extension HeroDetailView: IHeroDetailView {
-
+    func displayHeroDetail(selected: Hero.Response?, related: [Hero.Response]) {
+        guard let hero = selected else { return }
+        selectedHero = hero
+        relatedHeroes = related
+        bindData()
+    }
 }

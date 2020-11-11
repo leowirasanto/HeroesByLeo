@@ -11,7 +11,7 @@ import UIKit
 protocol IHomePageView: class {
     var router: IHomePageRouter? { get set }
     func displayHeroes(heroes: [Hero.Response])
-    func displayErrorGetHeroes()
+    func displayErrorGetHeroes(error: HeroError)
     func displayAvailableFilters(filters: [String])
     func displayRelatedHeroes(related: [Hero.Response], selectedHero: Hero.Response)
 }
@@ -93,8 +93,8 @@ extension HomePageView: IHomePageView {
         refreshControl?.endRefreshing()
     }
 
-    func displayErrorGetHeroes() {
-        print("Error get data")
+    func displayErrorGetHeroes(error: HeroError) {
+        self.showErrorView(error: error)
     }
 
     func displayAvailableFilters(filters: [String]) {

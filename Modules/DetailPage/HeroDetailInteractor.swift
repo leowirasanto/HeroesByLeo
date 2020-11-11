@@ -9,6 +9,7 @@ import Foundation
 
 protocol IHeroDetailInteractor: class {
     var parameters: [String: Any]? { get set }
+    func fetchHeroDetail()
 }
 
 class HeroDetailInteractor: IHeroDetailInteractor {
@@ -19,5 +20,9 @@ class HeroDetailInteractor: IHeroDetailInteractor {
     init(presenter: IHeroDetailPresenter, manager: IHeroDetailManager) {
         self.presenter = presenter
         self.manager = manager
+    }
+
+    func fetchHeroDetail() {
+        presenter.presentHeroDetail(param: parameters)
     }
 }

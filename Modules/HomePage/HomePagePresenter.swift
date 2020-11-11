@@ -27,13 +27,11 @@ class HomePagePresenter: IHomePagePresenter {
     func success(heroes: [Hero.Response]) {
         self.heroes = heroes
         view?.displayHeroes(heroes: heroes)
+        view?.displayErrorGetHeroes(error: .noConnection)
     }
 
     func failure(heroError: HeroError) {
-        switch heroError {
-        case .noData:
-            view?.displayErrorGetHeroes()
-        }
+        view?.displayErrorGetHeroes(error: heroError)
     }
 
     func presentHeroByFilter(_ keyword: String) {

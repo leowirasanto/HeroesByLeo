@@ -8,6 +8,7 @@
 import Foundation
 
 protocol IHeroDetailPresenter {
+    func presentHeroDetail(param: [String: Any]?)
 }
 
 class HeroDetailPresenter: IHeroDetailPresenter {
@@ -16,6 +17,12 @@ class HeroDetailPresenter: IHeroDetailPresenter {
 
     init(view: HeroDetailView?) {
         self.view = view
+    }
+
+    func presentHeroDetail(param: [String: Any]?) {
+        let related = param?["relatedHeroes"] as? [Hero.Response]
+        let selected = param?["selectedHero"] as? Hero.Response
+        view?.displayHeroDetail(selected: selected, related: related ?? [])
     }
 }
 
