@@ -94,7 +94,8 @@ extension HomePageView: IHomePageView {
     }
 
     func displayErrorGetHeroes(error: HeroError) {
-        self.showErrorView(error: error)
+//        self.showErrorView(error: error)
+        self.showAlert(error: error)
     }
 
     func displayAvailableFilters(filters: [String]) {
