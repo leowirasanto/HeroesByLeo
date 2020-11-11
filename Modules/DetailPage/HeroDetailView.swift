@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import AlamofireImage
+import RealmSwift
 
 protocol IHeroDetailView: class {
     var router: IHeroDetailRouter? { get set }
@@ -31,9 +32,18 @@ class HeroDetailView: UIViewController {
 
     var relatedHeroes: [Hero.Response] = []
     var selectedHero: Hero.Response?
+    let realmService = RealmService.share
 
     override func viewDidLoad() {
         interactor?.fetchHeroDetail()
+        realmService.get(object: HeroRealm.self) { (result) in
+            switch result {
+            case .success(let result):
+                print(result)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 
     private func bindData() {

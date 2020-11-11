@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -18,6 +19,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let rootView = MainView() //HomePageModule.setup() as? HomePageView
         window?.rootViewController = rootView
         window?.makeKeyAndVisible()
+
+        let realmConfig = Realm.Configuration(
+            schemaVersion: 1,
+            migrationBlock: { _, oldVersion in
+                print("Old schema version: \(oldVersion)")
+            }
+        )
+        Realm.Configuration.defaultConfiguration = realmConfig
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

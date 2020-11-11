@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 protocol IHomePagePresenter {
     func success(heroes: [Hero.Response])
@@ -19,6 +20,8 @@ protocol IHomePagePresenter {
 class HomePagePresenter: IHomePagePresenter {
     weak var view: IHomePageView?
     private var heroes = [Hero.Response]()
+    private var heroRealm = List<HeroRealm>()
+    let realmService = RealmService.share
 
     init(view: IHomePageView?) {
         self.view = view
@@ -26,6 +29,11 @@ class HomePagePresenter: IHomePagePresenter {
 
     func success(heroes: [Hero.Response]) {
         self.heroes = heroes
+        let realmObj = List<HeroRealm>()
+        heroes.forEach { hero in
+            realmObj.append(HeroRealm(response: hero))
+        }
+        realmService.save(realmObj, isUpdate: false, completion: nil)
         view?.displayHeroes(heroes: heroes)
     }
 
