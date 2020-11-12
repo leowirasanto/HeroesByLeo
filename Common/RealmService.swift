@@ -47,6 +47,16 @@ class RealmService: IRealmService {
         }
     }
 
+    func get<T: RealmObject>(object: T.Type, primaryKey: Int, completion: @escaping (Swift.Result<T, RealmError>) -> Void) {
+        do {
+            guard let result = self.realm?.object(ofType: object, forPrimaryKey: primaryKey) else {
+                completion(.failure(.notFound))
+                return
+            }
+            completion(.success(result))
+        }
+    }
+
     func get<T: RealmObject>(object: T.Type, withFilter: String? = nil, completion: @escaping (Swift.Result<RealmSwift.Results<T>, RealmError>) -> Void) {
         guard let predicate = withFilter else {
             guard let result = self.realm?.objects(object) else {

@@ -59,7 +59,7 @@ class HeroRealm: RealmObject {
     @objc dynamic var eight_win: Double = 0.0
     @objc dynamic var null_pick: Double = 0.0
     @objc dynamic var null_win: Double = 0.0
-    let roles = List<String>()
+    var roles = List<String>()
 
     override class func primaryKey() -> String? {
         return "id"
@@ -117,5 +117,14 @@ class HeroRealm: RealmObject {
         self.eight_win = response.eight_win ?? 0
         self.null_pick = response.null_pick ?? 0
         self.null_win = response.null_win ?? 0
+        self.roles = getRoles(roles: response.roles ?? [])
+    }
+
+    private func getRoles(roles: [String]) -> List<String> {
+        let result = List<String>()
+        for role in roles {
+            result.append(role)
+        }
+        return result
     }
 }

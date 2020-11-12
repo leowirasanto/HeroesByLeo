@@ -8,7 +8,7 @@
 import UIKit
 
 protocol IHomePageRouter: class {
-    func navigateToDetail(relatedHeroes: [Hero.Response], selectedHero: Hero.Response)
+    func navigateToDetail(relatedHeroes: [Hero.Response], selectedId: Int)
 }
 
 class HomePageRouter: IHomePageRouter {
@@ -18,7 +18,7 @@ class HomePageRouter: IHomePageRouter {
         self.view = view
     }
 
-    func navigateToDetail(relatedHeroes: [Hero.Response], selectedHero: Hero.Response) {
-        self.view?.navigate(type: .push, module: GeneralRouter.detail(parameter: ["relatedHeroes": relatedHeroes, "selectedHero": selectedHero]), completion: nil)
+    func navigateToDetail(relatedHeroes: [Hero.Response], selectedId: Int) {
+        self.view?.navigate(type: .push, module: GeneralRouter.detail(parameter: [Configs.relatedHero.rawValue: relatedHeroes, Configs.selectedHeroId.rawValue: selectedId]), completion: nil)
     }
 }

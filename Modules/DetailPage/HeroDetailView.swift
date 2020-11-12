@@ -12,7 +12,8 @@ import RealmSwift
 
 protocol IHeroDetailView: class {
     var router: IHeroDetailRouter? { get set }
-    func displayHeroDetail(selected: Hero.Response?, related: [Hero.Response])
+    func displayRelatedHero(related: [Hero.Response])
+    func displaySelectedHero(selected: HeroRealm)
 }
 
 class HeroDetailView: UIViewController {
@@ -31,43 +32,35 @@ class HeroDetailView: UIViewController {
     @IBOutlet var similarHeroesIcons: [UIImageView]!
 
     var relatedHeroes: [Hero.Response] = []
-    var selectedHero: Hero.Response?
+    var selected: HeroRealm?
     let realmService = RealmService.share
 
     override func viewDidLoad() {
         interactor?.fetchHeroDetail()
-        realmService.get(object: HeroRealm.self) { (result) in
-            switch result {
-            case .success(let result):
-                print(result)
-            case .failure(let error):
-                print(error)
-            }
-        }
     }
 
     private func bindData() {
-        let imgPath: String? = "https://api.opendota.com\(selectedHero?.img ?? "")"
+        let imgPath: String? = "\(Configs.imageBaseUrl.rawValue)\(selected?.img ?? "")"
         detailImage.setImage(urlString: imgPath)
-        nameLabel.text = selectedHero?.localized_name
+        nameLabel.text = selected?.localized_name
 
         var roles = ""
-        selectedHero?.roles?.forEach({ role in
+        selected?.roles.forEach({ role in
             roles.append("\(role) ")
         })
         roleLabel.text = "Role:\n\(roles)"
 
-        attrLabel.text = selectedHero?.primary_attr
-        speedLabel.text = "\(selectedHero?.move_speed ?? 0)"
-        hpLabel.text = "\(selectedHero?.base_health ?? 0)"
-        attackLabel.text = "\(selectedHero?.base_attack_max ?? 0)"
+        attrLabel.text = selected?.primary_attr
+        speedLabel.text = "\(selected?.move_speed ?? 0)"
+        hpLabel.text = "\(selected?.base_health ?? 0)"
+        attackLabel.text = "\(selected?.base_attack_max ?? 0)"
 
         for (index, hero) in relatedHeroes.enumerated() {
-            let imgPath: String? = "https://api.opendota.com\(hero.img ?? "")"
+            let imgPath: String? = "\(Configs.imageBaseUrl.rawValue)\(hero.img ?? "")"
             similarHeroesIcons[index].setImage(urlString: imgPath)
         }
 
-        if selectedHero?.attack_type?.lowercased() ?? "melee" == "melee" {
+        if selected?.attack_type?.lowercased() ?? Configs.melee.rawValue == Configs.melee.rawValue {
             typeIcon.image = #imageLiteral(resourceName: "melee.png")
         } else {
             typeIcon.image = #imageLiteral(resourceName: "ranged")
@@ -76,10 +69,12 @@ class HeroDetailView: UIViewController {
 }
 
 extension HeroDetailView: IHeroDetailView {
-    func displayHeroDetail(selected: Hero.Response?, related: [Hero.Response]) {
-        guard let hero = selected else { return }
-        selectedHero = hero
+    func displayRelatedHero(related: [Hero.Response]) {
         relatedHeroes = related
+    }
+
+    func displaySelectedHero(selected: HeroRealm) {
+        self.selected = selected
         bindData()
     }
 }

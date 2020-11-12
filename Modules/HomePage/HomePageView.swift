@@ -13,7 +13,7 @@ protocol IHomePageView: class {
     func displayHeroes(heroes: [Hero.Response])
     func displayErrorGetHeroes(error: HeroError)
     func displayAvailableFilters(filters: [String])
-    func displayRelatedHeroes(related: [Hero.Response], selectedHero: Hero.Response)
+    func displayRelatedHeroes(related: [Hero.Response], selectedId: Int)
 }
 
 class HomePageView: UIViewController {
@@ -103,8 +103,8 @@ extension HomePageView: IHomePageView {
         filterTable.reloadData()
     }
 
-    func displayRelatedHeroes(related: [Hero.Response], selectedHero: Hero.Response) {
-        router?.navigateToDetail(relatedHeroes: related, selectedHero: selectedHero)
+    func displayRelatedHeroes(related: [Hero.Response], selectedId: Int) {
+        router?.navigateToDetail(relatedHeroes: related, selectedId: selectedId)
     }
 }
 

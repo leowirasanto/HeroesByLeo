@@ -67,23 +67,26 @@ class HomePagePresenter: IHomePagePresenter {
         let attr = selectedHero.primary_attr
         var result: [Hero.Response] = []
         let related = heroes.filter({ $0.primary_attr == attr }).sorted { (a, b) -> Bool in
-            if attr == "agi" {
+            guard let primAttr = attr else { return false }
+            switch PrimaryAttr(rawValue: primAttr) {
+            case .agi:
                 guard let amov = a.move_speed, let bmov = b.move_speed else { return false }
                 return amov > bmov
-            } else if attr == "str" {
+            case .str:
                 guard let aatt = a.base_attack_max, let batt = b.base_attack_max else { return false }
                 return aatt > batt
-            } else if attr == "int" {
+            case .int:
                 guard let amana = a.base_mana, let bmana = b.base_mana else { return false }
                 return amana > bmana
+            case .none:
+                return false
             }
-            return false
         }
         if related.count >= 3 {
             result = Array(related.prefix(3))
         } else {
             result = related
         }
-        view?.displayRelatedHeroes(related: result, selectedHero: selectedHero)
+        view?.displayRelatedHeroes(related: result, selectedId: selectedHero.id ?? 0)
     }
 }
