@@ -18,7 +18,7 @@ protocol IEndpoint {
 
 class NetworkService {
     static let share = NetworkService()
-    private let isConnectedToInternet = NetworkReachabilityManager()?.isReachable ?? false
+    let isConnectedToInternet = NetworkReachabilityManager()?.isReachable ?? false
 
     func fetch<T: Decodable>(endpoint: IEndpoint, completion: @escaping (Result<[T], HeroError>) -> Void) {
         AF.request(endpoint.path, method: endpoint.method, parameters: endpoint.parameter, encoding: endpoint.encoding, headers: endpoint.header)
